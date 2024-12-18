@@ -1,0 +1,28 @@
+.ratingContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .fullStar {
+    width: 20px;
+    height: 20px;
+    background-image: url('../../public/star.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  
+  .halfStar {
+    width: 20px;
+    height: 20px;
+    background-image: url('../../public/halfStar.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  
+  .emptyStar {
+    width: 20px;
+    height: 20px;
+    background-image: url('../../public/star_outline.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+  }

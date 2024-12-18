@@ -1,0 +1,57 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    padding: 5px 7%;
+    background-color: #4f4f4f; 
+    border-bottom: 1px solid #3b3b3b;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .link {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+
+  .link:hover {
+    color: rgb(27, 27, 27);
+  }
+  
+  .logo img {
+    height: auto; 
+  }
+  
+  .nav {
+    flex-grow: 1;
+    text-align: center;
+  }
+  
+  .userSection {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-weight: bold;
+    color: rgba(23, 23, 23, 0.822);
+  }
+  
+  .logoutButton {
+    background-color: black;
+    border-radius: 5px;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .logoutButton:hover {
+    background-color: rgb(48, 48, 48);
+  }

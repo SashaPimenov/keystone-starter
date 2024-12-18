@@ -1,0 +1,13 @@
+.container {
+    width: 100%;
+    border: 1px solid #3d3d3d;
+    border-radius: 5px;
+    padding: 2%;
+    margin-bottom: 20px;
+}
+
+.reviewsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

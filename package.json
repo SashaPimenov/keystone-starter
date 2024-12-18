@@ -3,6 +3,7 @@
   "version": "1.0.3",
   "private": true,
   "scripts": {
+    "test": "jest",
     "dev": "keystone dev",
     "start": "keystone start",
     "keystone:dev": "keystone dev --verbose",
@@ -21,15 +22,17 @@
     "dotenv": "^16.4.7",
     "graphql": "^16.9.0",
     "graphql-yoga": "^5.10.4",
-    "typescript": "^5.5.0",
     "next": "^14.2.0",
+    "pg": "^8.13.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.3.0",
     "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.14",
     "@types/node": "^20.14.10",
+    "@types/pg": "^8.11.10",
     "@types/react-dom": "^18.3.0",
     "eslint": "^9.16.0",
     "eslint-config-next": "^15.0.4",
@@ -43,6 +46,8 @@
     "prettier": "^3.4.2",
     "prisma": "5.19.0",
     "react": "^18.3.1",
-    "typescript": "^5.5.0"
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
   }
 }

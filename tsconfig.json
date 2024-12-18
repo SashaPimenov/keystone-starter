@@ -13,13 +13,13 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "outDir": "./dist"
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/keystone/context.js"
-  ],
+    "src/keystone/context.js" ],
   "exclude": ["node_modules"]
 }

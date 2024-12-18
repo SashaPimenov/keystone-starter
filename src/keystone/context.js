@@ -1,9 +1,7 @@
-import { getContext } from "@keystone-6/core/context";
-import config from "../../keystone";
-import * as PrismaModule from "myprisma";
+import { getContext } from '@keystone-6/core/context'
+import config from '../../keystone'
+import * as PrismaModule from '.prisma/client'
 
-export const keystoneContext =
-  globalThis.keystoneContext || getContext(config, PrismaModule);
+export const keystoneContext = globalThis.keystoneContext || getContext(config, PrismaModule)
 
-if (process.env.NODE_ENV !== "production")
-  globalThis.keystoneContext = keystoneContext;
+if (process.env.NODE_ENV !== 'production') globalThis.keystoneContext = keystoneContext

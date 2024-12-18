@@ -1,0 +1,40 @@
+.container {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.bookInfoandImageContainer {
+    width: 35%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.imageContainer {
+    width: 50%;
+    overflow: hidden; 
+    height: 300px; 
+    min-width: 220px;
+}
+
+.infoContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.infoPropery  {
+    text-align: center;
+}
+
+.infoValue {
+    font-weight: bold;
+    text-align: center;
+}
+.reviewContainer {
+    width: 65%;
+}

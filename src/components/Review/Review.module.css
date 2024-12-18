@@ -1,0 +1,23 @@
+.textContainer {
+    border: 1px gray solid ;
+    padding: 2%;
+    border-radius: 5px;
+}
+
+.authorText {
+    color: gray;
+    text-decoration: underline;
+}
+.ratingContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.resultText {
+    font-weight: bold;
+}
+
+.content{
+    overflow-wrap: break-word
+}

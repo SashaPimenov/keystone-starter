@@ -12,8 +12,63 @@ generator client {
 }
 
 model User {
-  id       String @id @default(cuid())
-  name     String @default("")
-  email    String @unique @default("")
-  password String
+  id                    String    @id @default(cuid())
+  name                  String    @default("")
+  email                 String    @unique @default("")
+  isAdmin               Boolean   @default(false)
+  password              String
+  reviews               Review[]  @relation("Review_user")
+  createdAt             DateTime? @default(now())
+  updatedAt             DateTime?
+  createdBy             User?     @relation("User_createdBy", fields: [createdById], references: [id])
+  createdById           String?   @map("createdBy")
+  updatedBy             User?     @relation("User_updatedBy", fields: [updatedById], references: [id])
+  updatedById           String?   @map("updatedBy")
+  from_User_createdBy   User[]    @relation("User_createdBy")
+  from_User_updatedBy   User[]    @relation("User_updatedBy")
+  from_Book_createdBy   Book[]    @relation("Book_createdBy")
+  from_Book_updatedBy   Book[]    @relation("Book_updatedBy")
+  from_Review_createdBy Review[]  @relation("Review_createdBy")
+  from_Review_updatedBy Review[]  @relation("Review_updatedBy")
+
+  @@index([createdById])
+  @@index([updatedById])
+}
+
+model Book {
+  id          String    @id @default(cuid())
+  title       String    @default("")
+  reviews     Review[]  @relation("Review_book")
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime?
+  createdBy   User?     @relation("Book_createdBy", fields: [createdById], references: [id])
+  createdById String?   @map("createdBy")
+  updatedBy   User?     @relation("Book_updatedBy", fields: [updatedById], references: [id])
+  updatedById String?   @map("updatedBy")
+
+  @@index([createdById])
+  @@index([updatedById])
+}
+
+model Review {
+  id          String    @id @default(cuid())
+  content     String    @default("")
+  rating      Int?
+  user        User?     @relation("Review_user", fields: [userId], references: [id])
+  userId      String?   @map("user")
+  book        Book?     @relation("Review_book", fields: [bookId], references: [id])
+  bookId      String?   @map("book")
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime?
+  createdBy   User?     @relation("Review_createdBy", fields: [createdById], references: [id])
+  createdById String?   @map("createdBy")
+  updatedBy   User?     @relation("Review_updatedBy", fields: [updatedById], references: [id])
+  updatedById String?   @map("updatedBy")
+
+  @@unique([userId, bookId])
+  @@index([rating])
+  @@index([userId])
+  @@index([bookId])
+  @@index([createdById])
+  @@index([updatedById])
 }

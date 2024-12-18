@@ -1,0 +1,47 @@
+.container {
+    width: 30%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    background-color: #262626;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 1%;
+    min-width: 400px;
+}
+
+.imageContainer {
+    overflow: hidden; 
+    height: 200px; 
+    border-radius: 8px;
+}
+
+.infoContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: space-evenly;
+}
+
+.bookProperty {
+    text-align: center;
+}
+
+.bookValue {
+    font-weight: bold;
+}
+
+.link {
+    transition: color 0.3s;
+    color: #948888;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 17px;
+}
+
+.link:hover {
+    color: gray; 
+}
