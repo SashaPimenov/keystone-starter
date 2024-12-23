@@ -12,6 +12,10 @@
     min-width: 400px;
 }
 
+.image {
+    object-fit: cover
+}
+
 .imageContainer {
     overflow: hidden; 
     height: 200px; 
@@ -34,6 +38,10 @@
 }
 
 .link {
+    text-decoration: none
+}
+
+.linkText {
     transition: color 0.3s;
     color: #948888;
     font-weight: bold;
@@ -42,6 +50,6 @@
     font-size: 17px;
 }
 
-.link:hover {
+.linkText:hover {
     color: gray; 
 }

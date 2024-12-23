@@ -1,29 +1,28 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import styles from './AddReview.module.css'
 import { useRouter } from 'next/router'
 import { useCreateReview } from '../../hooks/review/useCreateReview/useCreateReview'
 import { ChangedRating } from '../ChangedRating/ChangedRating'
+import { fieldValidateHelper } from '../../helpers/fieldValidateHelper'
 
 export const AddReview = () => {
   const [reviewText, setReviewText] = useState('')
   const [rating, setRating] = useState(1)
   const router = useRouter()
   const { id } = router.query
-  const { handleSubmit, loading, error, successCreate } = useCreateReview()
+  const { handleCreateReview, loading } = useCreateReview(() => {
+    setReviewText('')
+    setRating(1)
+  })
 
   const handleAddReview = async () => {
-    const data = {
-      content: reviewText,
-      rating,
-      book: { connect: { id: id as string } }
-    }
-    try {
-      await handleSubmit(data)
-    } catch {
-      console.log('error')
-    } finally {
-      setReviewText('')
-      setRating(1)
+    if (fieldValidateHelper('Отзыв', reviewText, 50, 1000)) {
+      const reviewData = {
+        content: reviewText,
+        rating,
+        book: { connect: { id: id as string } }
+      }
+      await handleCreateReview(reviewData)
     }
   }
   return (
@@ -47,8 +46,6 @@ export const AddReview = () => {
           {loading ? 'Добавление...' : 'Добавить'}
         </button>
       </div>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-      {successCreate && <div style={{ color: 'green' }}>{successCreate}</div>}
     </>
   )
 }

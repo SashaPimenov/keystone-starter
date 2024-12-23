@@ -1,17 +1,10 @@
-import { useQuery } from '@apollo/client'
-import { useEffect, useState } from 'react'
-import { GET_BOOKS } from './GET_BOOKS'
-import { BookType } from './types'
+import { QueryOptions, useQuery } from '@apollo/client'
+import { GET_BOOKS } from './gql'
 
-export const useBooks = () => {
-  const { loading, error, data } = useQuery(GET_BOOKS)
-  const [books, setBooks] = useState<BookType[]>([])
+export const useBooks = (options?: QueryOptions) => {
+  const { loading, error, data } = useQuery(GET_BOOKS, {
+    ...options
+  })
 
-  useEffect(() => {
-    if (data) {
-      setBooks(data.books)
-    }
-  }, [data])
-
-  return { loading, error, books }
+  return { loading, error, data }
 }

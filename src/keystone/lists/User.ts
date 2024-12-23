@@ -1,8 +1,8 @@
 import { list } from '@keystone-6/core'
-import { checkbox, password, relationship, text, timestamp } from '@keystone-6/core/fields'
-import { allOperations, allowAll, denyAll } from '@keystone-6/core/access'
-import { isAuth } from './isAuth'
-import { isAdmin } from './isAdmin'
+import { checkbox, password, relationship, text } from '@keystone-6/core/fields'
+import { allOperations } from '@keystone-6/core/access'
+import { isAuth } from '../access_utils/isAuth'
+import { isAdmin } from '../access_utils/isAdmin'
 import { trackingFields } from '../trackingFields'
 
 const User = list({
@@ -18,15 +18,28 @@ const User = list({
   },
   fields: {
     name: text({
-      validation: { isRequired: true, length: { min: 4, max: 15 } }
+      validation: { isRequired: true },
+      hooks: {
+        validateInput: ({ resolvedData, addValidationError }) => {
+          if (resolvedData.name.length <= 2 || resolvedData.name.length > 15) {
+            addValidationError('Имя должно быть от 2 до 15 символов')
+          }
+        }
+      }
     }),
     email: text({
       validation: {
         isRequired: true,
-        length: { min: 4, max: 30 },
         match: {
           regex: /^\S+@\S+\.\S+$/,
           explanation: 'Неверный формат почты'
+        }
+      },
+      hooks: {
+        validateInput: ({ resolvedData, addValidationError }) => {
+          if (resolvedData.email.length < 3 || resolvedData.email.length > 30) {
+            addValidationError('E-mail должен быть от 4 до 30 символов')
+          }
         }
       },
       isIndexed: 'unique'
@@ -39,9 +52,7 @@ const User = list({
     password: password({
       access: {
         read: () => false,
-        update: ({ session, item }) => {
-          return isAdmin(session) || session.itemId === item.id
-        }
+        update: ({ session, item }) => isAdmin(session) || session.itemId === item.id
       },
       validation: { isRequired: true, length: { min: 8 } }
     }),

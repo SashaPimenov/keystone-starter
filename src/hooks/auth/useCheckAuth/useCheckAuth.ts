@@ -1,10 +1,11 @@
 import { useQuery } from '@apollo/client'
-import { CHECK_AUTH } from './CHECK_AUTH'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { CHECK_AUTH } from './gql'
+import { ROUTES } from '../../../routes'
 
 export const useCheckAuth = () => {
-  const { data, loading } = useQuery(CHECK_AUTH)
+  const { data, loading, ...rest } = useQuery(CHECK_AUTH)
   const router = useRouter()
 
   useEffect(() => {
@@ -13,11 +14,11 @@ export const useCheckAuth = () => {
     const isAuthenticated = !!data?.authenticatedItem
     const currentPath = router.pathname
     if (isAuthenticated && (currentPath === '/auth' || currentPath === '/register')) {
-      router.replace('/')
+      router.replace(ROUTES.MAIN)
     } else if (!isAuthenticated && currentPath !== '/auth' && currentPath !== '/register') {
-      router.replace('/auth')
+      router.replace(ROUTES.AUTH)
     }
   }, [data, loading, router])
 
-  return { isAuthenticated: !!data?.authenticatedItem, loading }
+  return { isAuthenticated: !!data?.authenticatedItem, loading, ...rest }
 }

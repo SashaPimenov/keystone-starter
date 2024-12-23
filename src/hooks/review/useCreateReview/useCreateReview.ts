@@ -1,30 +1,28 @@
 import { useMutation } from '@apollo/client'
-import { useState } from 'react'
-import { CREATE_REVIEW } from './CREATE_REVIEW'
-import { useBook } from '../../../context/useBook'
+import { CREATE_REVIEW } from './gql'
+import { toast } from 'react-toastify'
+import { errorLogger } from '../../../helpers/errorLogger'
+import _ from 'lodash'
 
-export const useCreateReview = () => {
-  const [createReview, { loading }] = useMutation(CREATE_REVIEW)
-  const [createReviewError, setCreateReviewError] = useState<string | null>(null)
-  const { setBook } = useBook()
-  const [successCreate, setSuccessCreate] = useState<string | null>(null)
-
-  const handleSubmit = async (data: { content: string; rating: number; book: { connect: { id: string } } }) => {
-    setCreateReviewError(null)
-    setSuccessCreate(null)
-    try {
-      const response = await createReview({ variables: { data } })
-      if (response.data?.createReview?.book) {
-        setBook(response.data?.createReview?.book)
-        setSuccessCreate('Отзыв успешно добавлен')
-        setTimeout(() => setSuccessCreate(null), 3000)
+type RequestData = { content: string; rating: number; book: { connect: { id: string } } }
+export const useCreateReview = (onSuccess: () => void) => {
+  const [createReview, { data, loading, error }] = useMutation(CREATE_REVIEW, {
+    onCompleted: (data) => {
+      if (data.createReview?.book) {
+        toast.success('Отзыв успешно добавлен')
+        onSuccess()
       }
-    } catch (err: any) {
-      const errorMessage = err?.graphQLErrors?.[0]?.message || 'Ошибка при добавлении отзыва'
-      setCreateReviewError(errorMessage)
-      setTimeout(() => setCreateReviewError(null), 3000)
+    },
+    onError: (error) => {
+      const message = _.get(error, 'graphQLErrors[0].message').split(': ')[1]
+      errorLogger(message)
+      toast.error(message)
     }
+  })
+
+  const handleCreateReview = async (data: RequestData) => {
+    await createReview({ variables: { data } })
   }
 
-  return { handleSubmit, loading, error: createReviewError, successCreate }
+  return { handleCreateReview, data, loading, error }
 }

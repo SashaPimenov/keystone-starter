@@ -21,9 +21,9 @@ export const trackingFields = {
       ...allOperations(denyAll)
     },
     hooks: {
-      resolveInput({ resolvedData, operation }) {
+      resolveInput({ operation }) {
         if (operation === 'update') {
-          return (resolvedData.updatedAt = new Date())
+          return new Date()
         }
       }
     },
@@ -42,9 +42,9 @@ export const trackingFields = {
       ...allOperations(denyAll)
     },
     hooks: {
-      resolveInput({ resolvedData, context, operation }) {
+      resolveInput({ context, operation }) {
         if (operation === 'create' && context?.session?.itemId) {
-          return (resolvedData.createdBy = { connect: { id: context.session.itemId } })
+          return { connect: { id: context.session.itemId } }
         }
       }
     },
@@ -63,9 +63,9 @@ export const trackingFields = {
       ...allOperations(denyAll)
     },
     hooks: {
-      resolveInput({ resolvedData, context, operation }) {
+      resolveInput({ context, operation }) {
         if (operation === 'update') {
-          return (resolvedData.updatedBy = { connect: { id: context.session.itemId } })
+          return { connect: { id: context.session.itemId } }
         }
       }
     },

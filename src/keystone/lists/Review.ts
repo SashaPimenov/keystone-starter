@@ -2,9 +2,9 @@ import { list } from '@keystone-6/core'
 import { relationship, text, timestamp } from '@keystone-6/core/fields'
 import { stars } from '../../../admin/customField'
 import { allOperations } from '@keystone-6/core/access'
-import { isAuth } from './isAuth'
+import { isAuth } from '../access_utils/isAuth'
 import { trackingFields } from '../trackingFields'
-import { isAdmin } from './isAdmin'
+import { isAdmin } from '../access_utils/isAdmin'
 
 const Review = list({
   access: {
@@ -18,11 +18,19 @@ const Review = list({
   },
   fields: {
     content: text({
-      validation: { isRequired: true, length: { min: 50, max: 1000 } }
+      validation: { isRequired: true },
+      hooks: {
+        validateInput: ({ resolvedData, addValidationError }) => {
+          if (resolvedData.content.length <= 50 || resolvedData.content.length > 1000) {
+            addValidationError('Текст отзыва должен быть от 50 до 1000 символов')
+          }
+        }
+      }
     }),
     rating: stars({
       isIndexed: true,
-      maxStars: 5
+      maxStars: 5,
+      isRequired: true
     }),
     user: relationship({
       ref: 'User.reviews',
@@ -42,11 +50,15 @@ const Review = list({
   hooks: {
     beforeOperation: {
       create: async ({ resolvedData, context }) => {
-        const userId = context.session.itemId
-        const bookId = resolvedData.book.connect.id
+        const userId = context?.session?.itemId
+        const bookId = resolvedData.book?.connect?.id
+
+        if (!bookId) {
+          throw new Error('Не заполнено обязательное поле book')
+        }
         const existingReview = await context.prisma.review.findFirst({
           where: {
-            AND: [{ userId: userId }, { bookId: bookId }]
+            AND: [{ userId }, { bookId }]
           }
         })
 

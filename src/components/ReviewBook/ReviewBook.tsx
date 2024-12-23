@@ -1,13 +1,26 @@
 import Image from 'next/image'
 import styles from './ReviewBook.module.css'
 import image from '../../public/image.png'
-import { useBook } from '../../context/useBook'
-import { ReviewsContainer } from '../ReviewsContainer/ReviewsContainer'
-import { Rating } from '../Rating/Rating'
+import { ReviewsContainer } from '../ReviewsContainer'
+import { useBookDetails } from '../../hooks/book'
+import { useRouter } from 'next/router'
+
+interface BookInfo {
+  Название: string | undefined
+  Рейтинг: number
+  'Количество отзывов': number | undefined
+}
 
 export const ReviewBook = () => {
-  const { book } = useBook()
+  const router = useRouter()
+  const { id } = router.query
+  const { book } = useBookDetails(id as string | undefined)
 
+  const bookData: BookInfo = {
+    Название: book?.title,
+    Рейтинг: book?.averageRating || 0,
+    'Количество отзывов': book?.reviewsCount || 0
+  }
   return (
     <div className={styles.container}>
       <div className={styles.bookInfoandImageContainer}>
@@ -15,18 +28,12 @@ export const ReviewBook = () => {
           <Image width={220} height={300} alt='Обложка книги' src={image} priority />
         </div>
         <div className={styles.infoContainer}>
-          <div>
-            <p className={styles.infoPropery}>Название</p>
-            <p className={styles.infoValue}>{book?.title}</p>
-          </div>
-          <div>
-            <p className={styles.infoPropery}>Рейтинг</p>
-            <Rating rating={book ? book.averageRating : 0} />
-          </div>
-          <div>
-            <p className={styles.infoPropery}>Количество отзывов</p>
-            <p className={styles.infoValue}>{book?.reviewsCount}</p>
-          </div>
+          {Object.entries(bookData).map(([key, value]) => (
+            <div key={key}>
+              <p className={styles.infoPropery}>{key}</p>
+              <p className={styles.infoValue}>{value}</p>
+            </div>
+          ))}
         </div>
       </div>
       <div className={styles.reviewContainer}>

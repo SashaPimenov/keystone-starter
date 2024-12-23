@@ -21,9 +21,13 @@
 }
 
 .link {
+    text-decoration: none
+}
+.linkText {
     transition: color 0.3s;
 }
 
-.link:hover {
+.linkText:hover {
     color: gray; 
 }
+

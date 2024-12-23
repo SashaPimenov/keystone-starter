@@ -1,24 +1,21 @@
 import styles from './AuthPage.module.css'
 import Link from 'next/link'
 import { useState } from 'react'
-import { useAuth } from '../../hooks/auth/useAuth/useAuth'
-import { useCheckAuth } from '../../hooks/auth/useCheckAuth/useCheckAuth'
-import LoadingComponent from '../../components/LoadingComponent/LoadingComponent'
+import { useAuth } from '../../hooks/auth'
+import { ROUTES } from '../../routes'
+import { withAuthentication } from '../../HOC/withAuthentication'
+import { fieldValidateHelper } from '../../helpers/fieldValidateHelper'
 
 const AuthPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { handleSubmit, isLoading: loading, error } = useAuth(email, password)
-  const { loading: checkAuthLoading, isAuthenticated } = useCheckAuth()
+  const { handleLogin, authLoading } = useAuth()
 
-  if (checkAuthLoading || loading) {
-    return <LoadingComponent />
+  const authValidate = () => {
+    if (fieldValidateHelper('Email', email, 4, 30)) {
+      handleLogin(email, password)
+    }
   }
-
-  if (isAuthenticated) {
-    return null
-  }
-
   return (
     <main>
       <div className={styles.authContainer}>
@@ -27,18 +24,17 @@ const AuthPage = () => {
           <input type='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email адрес' required />
           <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Пароль' required />
           <div className={styles.buttonDiv}>
-            <button onClick={handleSubmit} disabled={loading}>
+            <button onClick={authValidate} disabled={authLoading || !email || !password}>
               {'Войти'}
             </button>
           </div>
-          {error && <div style={{ color: 'red' }}>{error}</div>}
         </div>
-        <Link href='/register' style={{ textDecoration: 'none' }}>
-          <p className={styles.link}>Зарегистрироваться</p>
+        <Link href={ROUTES.REGISTER} className={styles.link}>
+          <p className={styles.linkText}>Зарегистрироваться</p>
         </Link>
       </div>
     </main>
   )
 }
 
-export default AuthPage
+export default withAuthentication(AuthPage, true)

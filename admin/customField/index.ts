@@ -27,11 +27,11 @@ export const stars =
         async validateInput(args) {
           const val = args.resolvedData[meta.fieldKey]
           if (isRequired && val == null) {
-            args.addValidationError('The value is required.')
+            args.addValidationError('Поле рейтинг обязательно')
           }
 
           if (!(val == null || (val >= 0 && val <= maxStars))) {
-            args.addValidationError(`The value must be within the range of 0-${maxStars}`)
+            args.addValidationError(`Значение рейтинга в диапазоне от 0 до ${maxStars}`)
           }
 
           await config.hooks?.validateInput?.(args)

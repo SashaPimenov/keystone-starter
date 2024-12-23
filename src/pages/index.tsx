@@ -1,24 +1,15 @@
-import { BooksContainer } from '../components/BooksContainer/BooksContainer'
-import { useCheckAuth } from '../hooks/auth/useCheckAuth/useCheckAuth'
-import LoadingComponent from '../components/LoadingComponent/LoadingComponent'
-import HeaderLayout from '../components/Layout/HeaderLayout'
+import { BooksContainer } from '../components/BooksContainer'
+import { Header } from '../components/Header'
+import { withAuthentication } from '../HOC/withAuthentication'
 
-export default function MainPage() {
-  const { isAuthenticated, loading: checkAuthLoading } = useCheckAuth()
-
-  if (checkAuthLoading || checkAuthLoading) {
-    return <LoadingComponent />
-  }
-
-  if (!isAuthenticated) {
-    return null
-  }
+export function MainPage() {
   return (
-    <HeaderLayout>
-      <main>
-        <h1>Страница для просмотра книг</h1>
-        <BooksContainer />
-      </main>
-    </HeaderLayout>
+    <main>
+      <Header />
+      <h1>Страница для просмотра книг</h1>
+      <BooksContainer />
+    </main>
   )
 }
+
+export default withAuthentication(MainPage, false)

@@ -1,29 +1,35 @@
-import { useRouter } from 'next/router'
 import { useMutation } from '@apollo/client'
-import { useState } from 'react'
-import { CREATE_USER } from './CREATE_USER'
-import { useAuth } from '../../auth/useAuth/useAuth'
+import { toast } from 'react-toastify'
+import { CREATE_USER } from './gql'
+import { errorLogger } from '../../../helpers/errorLogger'
+import { useAuth } from '../../auth'
 
-export const useRegister = (name: string, email: string, password: string) => {
-  const [createUser] = useMutation(CREATE_USER)
-  const [registrationError, setRegistrationError] = useState<string | null>(null)
-  const { handleSubmit: authSubmit, isLoading } = useAuth(email, password)
-
-  const handleSubmit = async () => {
-    setRegistrationError(null)
-    try {
-      await createUser({
-        variables: { data: { name, email, password } }
-      })
-      authSubmit()
-    } catch (err: any) {
-      setRegistrationError('Ошибка регистрации')
+type UseRegisterDataType = {
+  name: string
+  email: string
+  password: string
+}
+export const useRegister = ({ name, email, password }: UseRegisterDataType) => {
+  const [createUser, { loading: registerLoading }] = useMutation(CREATE_USER, {
+    onError: (err) => {
+      errorLogger(err.message)
+      toast.error('Ошибка регистрации')
+    },
+    onCompleted: () => {
+      handleLogin(email, password)
     }
+  })
+
+  const { handleLogin, authLoading } = useAuth()
+
+  const handleRegister = async () => {
+    await createUser({
+      variables: { data: { name, email, password } }
+    })
   }
 
   return {
-    handleSubmit,
-    loading: isLoading,
-    error: registrationError
+    handleRegister,
+    loading: registerLoading || authLoading
   }
 }

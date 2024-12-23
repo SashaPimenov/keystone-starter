@@ -1,23 +1,28 @@
 import Link from 'next/link'
 import styles from './RegisterPage.module.css'
-import { useRegister } from '../../hooks/register/useRegister/useRegister'
+import { useRegister } from '../../hooks/register'
 import { useState } from 'react'
-import { useCheckAuth } from '../../hooks/auth/useCheckAuth/useCheckAuth'
-import LoadingComponent from '../../components/LoadingComponent/LoadingComponent'
+import { ROUTES } from '../../routes'
+import { withAuthentication } from '../../HOC/withAuthentication'
+import { fieldValidateHelper } from '../../helpers/fieldValidateHelper'
+import { toast } from 'react-toastify'
+
+const emailRegex = /^\S+@\S+\.\S+$/
 
 const RegisterPage = () => {
   const [name, setName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const { handleSubmit, loading, error } = useRegister(name, email, password)
-  const { loading: checkAuthLoading, isAuthenticated } = useCheckAuth()
+  const { handleRegister, loading } = useRegister({ name, email, password })
 
-  if (checkAuthLoading || loading) {
-    return <LoadingComponent />
-  }
-
-  if (isAuthenticated) {
-    return null
+  const registerValidate = () => {
+    if (fieldValidateHelper('Имя', name, 2, 15) && fieldValidateHelper('Email', email, 4, 30) && fieldValidateHelper('Пароль', password, 8, 20)) {
+      if (emailRegex.test(email)) {
+        handleRegister()
+      } else {
+        toast.error('Неверный формат почты')
+      }
+    }
   }
   return (
     <main>
@@ -30,7 +35,7 @@ const RegisterPage = () => {
             onChange={(e) => setName(e.target.value)}
             placeholder='Имя пользователя'
             required
-            minLength={20}
+            minLength={2}
             maxLength={20}
           />
           <input
@@ -39,7 +44,7 @@ const RegisterPage = () => {
             onChange={(e) => setEmail(e.target.value)}
             placeholder='Email адрес'
             required
-            minLength={8}
+            minLength={4}
             maxLength={40}
           />
           <input
@@ -49,21 +54,20 @@ const RegisterPage = () => {
             placeholder='Пароль'
             required
             minLength={8}
-            maxLength={15}
+            maxLength={20}
           />
           <div className={styles.buttonDiv}>
-            <button onClick={handleSubmit} disabled={loading}>
+            <button onClick={registerValidate} disabled={loading || !name || !email || !password}>
               {loading ? 'Регистрация...' : 'Зарегистрироваться'}
             </button>
           </div>
-          {error && <div style={{ color: 'red' }}>{error}</div>}
         </div>
-        <Link href='/auth' style={{ textDecoration: 'none' }}>
-          <p className={styles.link}>Авторизация</p>
+        <Link href={ROUTES.AUTH} className={styles.link}>
+          <p className={styles.linkText}>Авторизация</p>
         </Link>
       </div>
     </main>
   )
 }
 
-export default RegisterPage
+export default withAuthentication(RegisterPage, true)

@@ -1,4 +1,4 @@
-import { isAdmin } from './src/keystone/lists/isAdmin'
+import { isAdmin } from './src/keystone/access_utils/isAdmin'
 import { config } from '@keystone-6/core'
 import * as dotenv from 'dotenv'
 import User from './src/keystone/lists/User'
@@ -8,9 +8,8 @@ import { withAuth } from './src/keystone/withAuth'
 import { session } from './src/keystone/session'
 
 dotenv.config()
-
-const DATABASE_URL = process.env.DATABASE_URL
-const dbUrl = DATABASE_URL || 'postgresql://postgres:postgres@127.0.0.1:25432/main'
+const dbUrl = process.env.DATABASE_URL || 'postgresql://postgres:postgres@127.0.0.1:25432/main'
+const serverUrl = process.env.SERVER_URL || 'http://localhost:4000'
 export default withAuth(
   config({
     db: {
@@ -23,11 +22,20 @@ export default withAuth(
       Review
     },
     session,
+    graphql: {
+      apolloConfig: {
+        formatError: (error) => {
+          return {
+            message: error.message
+          }
+        }
+      }
+    },
     ui: {
       isAccessAllowed: isAdmin
     },
     server: {
-      cors: { origin: ['http://localhost:4000'], credentials: true }
+      cors: { origin: [serverUrl], credentials: true }
     }
   })
 )

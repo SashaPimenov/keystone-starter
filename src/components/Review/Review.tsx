@@ -1,4 +1,4 @@
-import { Rating } from '../Rating/Rating'
+import { Rating } from '../Rating'
 import styles from './Review.module.css'
 
 type IProps = {
@@ -15,7 +15,7 @@ export const Review = ({ user, rating, content }: IProps) => {
       <div className={styles.ratingContainer}>
         <p className={styles.resultText}>Автор:</p>
         <p className={styles.authorText}>
-          {user.name} ({user.email})
+          {user?.name} ({user?.email})
         </p>
       </div>
       <div>

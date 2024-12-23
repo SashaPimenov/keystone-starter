@@ -1,23 +1,26 @@
-import { useBooks } from '../../hooks/books/useBooks/useBooks'
-import { Book } from '../Book/Book'
+import { useBooks } from '../../hooks/books'
+import { BookType } from '../../pages/books/types'
+import { Book } from '../Book'
+import { ErrorComponent } from '../ErrorComponent'
+import { LoadingComponent } from '../LoadingComponent'
 import styles from './BooksContainer.module.css'
 
 export const BooksContainer = () => {
-  const { loading, error, books } = useBooks()
+  const { loading, error, data } = useBooks()
 
-  if (loading) return <p>Загрузка...</p>
+  if (loading) return <LoadingComponent />
 
-  if (error) return <p>Ошибка: {error.message}</p>
+  if (error) return <ErrorComponent />
 
   return (
     <section className={styles.container}>
       <div>
         <h2 className={styles.headerText}>Все книги</h2>
-        {books.length === 0 ? (
+        {!data.objs.length ? (
           <h3 className={styles.headerText}>Книг нет</h3>
         ) : (
           <div className={styles.bookContainer}>
-            {books.map((book) => (
+            {data.objs.map((book: BookType) => (
               <Book book={book} key={book.id} />
             ))}
           </div>

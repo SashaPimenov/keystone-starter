@@ -1,21 +1,14 @@
-import { ApolloError, useQuery } from '@apollo/client'
+import { QueryOptions, useQuery } from '@apollo/client'
+import { GET_BOOK_BY_ID } from './gql'
 
-import { GET_BOOK_BY_ID } from './GET_BOOK_BY_ID'
-import { BookDetails } from '../../../context/types'
-
-export const useBookDetails = (
-  bookId: string | undefined
-): {
-  book: BookDetails | null
-  loading: boolean
-  error: ApolloError | undefined
-} => {
+export const useBookDetails = (bookId: string | undefined, options?: QueryOptions) => {
   const { loading, error, data } = useQuery(GET_BOOK_BY_ID, {
     variables: { where: { id: bookId } },
-    skip: !bookId
+    skip: !bookId,
+    ...options
   })
 
-  const book = data?.book || null
+  const book = data?.obj || null
 
   return { book, loading, error }
 }

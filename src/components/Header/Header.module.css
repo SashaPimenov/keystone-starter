@@ -3,6 +3,9 @@
     align-items: center;
     justify-content: space-between;
     height: 50px;
+    width: 100%;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
     padding: 5px 7%;
     background-color: #4f4f4f; 
     border-bottom: 1px solid #3b3b3b;

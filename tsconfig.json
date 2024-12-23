@@ -20,6 +20,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/keystone/context.js" ],
+    "src/keystone/context.js", "src/hooks/auth/useCheckAuth" ],
   "exclude": ["node_modules"]
 }

@@ -1,23 +1,29 @@
-import { BookProvider } from '../../context/BookProvider'
-import { useCheckAuth } from '../../hooks/auth/useCheckAuth/useCheckAuth'
-import LoadingComponent from '../../components/LoadingComponent/LoadingComponent'
-import HeaderLayout from '../../components/Layout/HeaderLayout'
-import { BookContent } from '../../components/BookContent/BookContent'
+import { Header } from '../../components/Header'
+import { withAuthentication } from '../../HOC/withAuthentication'
+import { useRouter } from 'next/router'
+import { LoadingComponent } from '../../components/LoadingComponent'
+import { ErrorComponent } from '../../components/ErrorComponent'
+import { ReviewBook } from '../../components/ReviewBook'
+import { useBookDetails } from '../../hooks/book'
 
-export default function OneBookPage() {
-  const { isAuthenticated, loading: checkAuthLoading } = useCheckAuth()
-  if (checkAuthLoading) {
+export function OneBookPage() {
+  const router = useRouter()
+  const { id } = router.query
+  const { book, loading, error } = useBookDetails(id as string | undefined)
+
+  if (loading) {
     return <LoadingComponent />
   }
 
-  if (!isAuthenticated) {
-    return null
+  if (error) {
+    return <ErrorComponent />
   }
   return (
-    <BookProvider>
-      <HeaderLayout>
-        <BookContent />
-      </HeaderLayout>
-    </BookProvider>
+    <main>
+      <Header />
+      <h1>Подробная информация о книге</h1>
+      {book ? <ReviewBook /> : <p>Книга не найдена</p>}
+    </main>
   )
 }
+export default withAuthentication(OneBookPage, false)
