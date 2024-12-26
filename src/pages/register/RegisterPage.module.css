@@ -8,8 +8,7 @@
     align-items: center;
 }
 
-
-.authForm {
+.registerForm {
     width: 30%;
     display: flex;
     flex-direction: column;
@@ -30,4 +29,3 @@
 .linkText:hover {
     color: gray; 
 }
-

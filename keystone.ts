@@ -1,11 +1,11 @@
-import { isAdmin } from './src/keystone/access_utils/isAdmin'
+import { isAdmin } from './src/keystone/accessUtils/isAdmin'
 import { config } from '@keystone-6/core'
 import * as dotenv from 'dotenv'
 import User from './src/keystone/lists/User'
-import Book from './src/keystone/lists/Book'
-import Review from './src/keystone/lists/Review'
 import { withAuth } from './src/keystone/withAuth'
 import { session } from './src/keystone/session'
+import Book from './src/keystone/lists/Book/Book'
+import Review from './src/keystone/lists/Review/Review'
 
 dotenv.config()
 const dbUrl = process.env.DATABASE_URL || 'postgresql://postgres:postgres@127.0.0.1:25432/main'
@@ -26,7 +26,9 @@ export default withAuth(
       apolloConfig: {
         formatError: (error) => {
           return {
-            message: error.message
+            ...error,
+            message: error.message,
+            extensions: { ...error.extensions }
           }
         }
       }

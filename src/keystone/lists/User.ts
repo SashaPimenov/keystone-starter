@@ -1,16 +1,16 @@
 import { list } from '@keystone-6/core'
 import { checkbox, password, relationship, text } from '@keystone-6/core/fields'
 import { allOperations } from '@keystone-6/core/access'
-import { isAuth } from '../access_utils/isAuth'
-import { isAdmin } from '../access_utils/isAdmin'
 import { trackingFields } from '../trackingFields'
+import { isAuth } from '../accessUtils/isAuth'
+import { isAdmin } from '../accessUtils/isAdmin'
 
 const User = list({
   access: {
     operation: {
       ...allOperations(isAdmin),
       query: isAuth,
-      create: (args) => !isAuth(args) || isAdmin(args)
+      create: (args) => true
     },
     filter: {
       update: (args) => isAdmin(args) || { id: { in: [args.session.itemId] } }

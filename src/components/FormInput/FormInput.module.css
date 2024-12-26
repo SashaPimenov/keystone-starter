@@ -1,0 +1,9 @@
+.input {
+    width: 100%;
+}
+
+.error {
+    color: rgb(250, 130, 130);
+    text-align: center;
+    margin: 0;
+}

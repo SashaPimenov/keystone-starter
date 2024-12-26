@@ -3,14 +3,10 @@ import styles from './Header.module.css'
 import img from '../../public/book_logo.png'
 import Image from 'next/image'
 import { ROUTES } from '../../routes'
-import { useAuth } from '../../hooks/auth'
-import { useUser } from '../../contexts/AuthContext/AuthProver'
+import { useAuth } from '../../contexts/AuthContext/AuthProvider'
 
 export const Header = () => {
-  const { handleLogout, logoutLoading } = useAuth()
-
-  const { user, loading } = useUser()
-
+  const { user, loading, logout, logoutLoading } = useAuth()
   return (
     <div className={styles.header}>
       <div className={styles.logo}>
@@ -21,8 +17,7 @@ export const Header = () => {
       </div>
       <div className={styles.userSection}>
         <div className={styles.userName}>{loading ? '...' : user?.name + ' (' + user?.email + ')'}</div>
-
-        <button className={styles.logoutButton} onClick={handleLogout} disabled={logoutLoading}>
+        <button className={styles.logoutButton} onClick={logout} disabled={logoutLoading}>
           {logoutLoading ? 'Выход...' : 'Выйти'}
         </button>
       </div>

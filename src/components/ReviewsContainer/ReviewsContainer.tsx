@@ -18,7 +18,7 @@ export const ReviewsContainer = () => {
         {!book?.reviews.length ? (
           <p>Отзывов пока нет</p>
         ) : (
-          book?.reviews.map((e: ReviewType, index: number) => <Review key={index} user={e.user} rating={e.rating} content={e.content} />)
+          book?.reviews.map((review: ReviewType) => <Review key={review.id} user={review.user} rating={review.rating} content={review.content} />)
         )}
       </div>
     </section>

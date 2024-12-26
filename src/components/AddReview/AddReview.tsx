@@ -3,7 +3,6 @@ import styles from './AddReview.module.css'
 import { useRouter } from 'next/router'
 import { useCreateReview } from '../../hooks/review/useCreateReview/useCreateReview'
 import { ChangedRating } from '../ChangedRating/ChangedRating'
-import { fieldValidateHelper } from '../../helpers/fieldValidateHelper'
 
 export const AddReview = () => {
   const [reviewText, setReviewText] = useState('')
@@ -16,7 +15,7 @@ export const AddReview = () => {
   })
 
   const handleAddReview = async () => {
-    if (fieldValidateHelper('Отзыв', reviewText, 50, 1000)) {
+    if (isValidate) {
       const reviewData = {
         content: reviewText,
         rating,
@@ -25,6 +24,9 @@ export const AddReview = () => {
       await handleCreateReview(reviewData)
     }
   }
+
+  const isValidate = reviewText.length > 50 && reviewText.length < 1000 && rating < 6 && rating > 0
+
   return (
     <>
       <h3 className={styles.header}>Добавить отзыв</h3>
@@ -42,8 +44,8 @@ export const AddReview = () => {
         <ChangedRating rating={rating} onRate={setRating} />
       </div>
       <div className={styles.buttonContainer}>
-        <button className={styles.button} disabled={reviewText.length < 50 || rating === 0 || loading} onClick={handleAddReview}>
-          {loading ? 'Добавление...' : 'Добавить'}
+        <button className={styles.button} disabled={!isValidate || loading} onClick={handleAddReview}>
+          {loading ? 'Добавление...' : 'Добавить отзыв'}
         </button>
       </div>
     </>

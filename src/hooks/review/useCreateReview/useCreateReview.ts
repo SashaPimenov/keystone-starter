@@ -2,19 +2,20 @@ import { useMutation } from '@apollo/client'
 import { CREATE_REVIEW } from './gql'
 import { toast } from 'react-toastify'
 import { errorLogger } from '../../../helpers/errorLogger'
-import _ from 'lodash'
+import get from 'lodash/get'
 
 type RequestData = { content: string; rating: number; book: { connect: { id: string } } }
-export const useCreateReview = (onSuccess: () => void) => {
+
+export const useCreateReview = (onSuccess?: () => void) => {
   const [createReview, { data, loading, error }] = useMutation(CREATE_REVIEW, {
     onCompleted: (data) => {
-      if (data.createReview?.book) {
+      if (data.obj?.book) {
         toast.success('Отзыв успешно добавлен')
-        onSuccess()
+        onSuccess && onSuccess()
       }
     },
     onError: (error) => {
-      const message = _.get(error, 'graphQLErrors[0].message').split(': ')[1]
+      const message = get(error, 'graphQLErrors[0].message').split(': ')[1]
       errorLogger(message)
       toast.error(message)
     }

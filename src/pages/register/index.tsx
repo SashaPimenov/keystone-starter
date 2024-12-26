@@ -1,67 +1,98 @@
 import Link from 'next/link'
 import styles from './RegisterPage.module.css'
 import { useRegister } from '../../hooks/register'
-import { useState } from 'react'
+import { useForm, FormProvider, SubmitHandler } from 'react-hook-form'
 import { ROUTES } from '../../routes'
 import { withAuthentication } from '../../HOC/withAuthentication'
-import { fieldValidateHelper } from '../../helpers/fieldValidateHelper'
-import { toast } from 'react-toastify'
+import { emailRegexp } from '../../helpers/regexp'
+import { FormInput } from '../../components/FormInput'
 
-const emailRegex = /^\S+@\S+\.\S+$/
+interface FormValues {
+  name: string
+  email: string
+  password: string
+}
 
 const RegisterPage = () => {
-  const [name, setName] = useState<string>('')
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
-  const { handleRegister, loading } = useRegister({ name, email, password })
+  const { handleRegister, loading } = useRegister()
 
-  const registerValidate = () => {
-    if (fieldValidateHelper('Имя', name, 2, 15) && fieldValidateHelper('Email', email, 4, 30) && fieldValidateHelper('Пароль', password, 8, 20)) {
-      if (emailRegex.test(email)) {
-        handleRegister()
-      } else {
-        toast.error('Неверный формат почты')
-      }
-    }
+  const methods = useForm<FormValues>({
+    mode: 'onChange'
+  })
+
+  const {
+    handleSubmit,
+    formState: { isValid }
+  } = methods
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    handleRegister(data)
   }
+
   return (
     <main>
       <div className={styles.registerContainer}>
         <h1>Регистрация</h1>
-        <div className={styles.authForm}>
-          <input
-            type='text'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder='Имя пользователя'
-            required
-            minLength={2}
-            maxLength={20}
-          />
-          <input
-            type='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder='Email адрес'
-            required
-            minLength={4}
-            maxLength={40}
-          />
-          <input
-            type='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder='Пароль'
-            required
-            minLength={8}
-            maxLength={20}
-          />
-          <div className={styles.buttonDiv}>
-            <button onClick={registerValidate} disabled={loading || !name || !email || !password}>
-              {loading ? 'Регистрация...' : 'Зарегистрироваться'}
-            </button>
-          </div>
-        </div>
+        <FormProvider {...methods}>
+          <form className={styles.registerForm} onSubmit={handleSubmit(onSubmit)}>
+            <FormInput
+              name='name'
+              type='text'
+              placeholder='Имя пользователя'
+              rules={{
+                required: 'Имя обязательно',
+                minLength: {
+                  value: 2,
+                  message: 'Имя должно содержать минимум 2 символа'
+                },
+                maxLength: {
+                  value: 20,
+                  message: 'Имя должно содержать максимум 20 символов'
+                }
+              }}
+            />
+
+            <FormInput
+              name='email'
+              type='email'
+              placeholder='Email'
+              rules={{
+                required: 'Email обязателен',
+                pattern: {
+                  value: emailRegexp,
+                  message: 'Некорректный email'
+                },
+                minLength: {
+                  value: 8,
+                  message: 'Email должен содержать минимум 8 символа'
+                },
+                maxLength: {
+                  value: 30,
+                  message: 'Email должен содержать максимум 30 символов'
+                }
+              }}
+            />
+
+            <FormInput
+              name='password'
+              type='password'
+              placeholder='Пароль'
+              rules={{
+                required: 'Пароль обязателен',
+                minLength: {
+                  value: 8,
+                  message: 'Пароль должен содержать минимум 8 символов'
+                }
+              }}
+            />
+
+            <div className={styles.buttonDiv}>
+              <button type='submit' disabled={loading || !isValid}>
+                {loading ? 'Регистрация...' : 'Зарегистрироваться'}
+              </button>
+            </div>
+          </form>
+        </FormProvider>
         <Link href={ROUTES.AUTH} className={styles.link}>
           <p className={styles.linkText}>Авторизация</p>
         </Link>

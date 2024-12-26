@@ -4,14 +4,14 @@ import '../styles/globals.css'
 import { ApolloProvider } from '@apollo/client'
 import client from '../api/apolloClient'
 import { ToastContainer } from 'react-toastify'
-import { UserProvider } from '../contexts/AuthContext/AuthProver'
+import { AuthProvider } from '../contexts/AuthContext/AuthProvider'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
-      <UserProvider>
+      <AuthProvider>
         <Component {...pageProps} />
-      </UserProvider>
+      </AuthProvider>
       <ToastContainer
         position='bottom-left'
         autoClose={1500}

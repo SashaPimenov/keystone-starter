@@ -1,9 +1,9 @@
 import { resetDatabase } from '@keystone-6/core/testing'
 import path from 'node:path'
-import { testConfig } from './utils'
 import { getContext } from '@keystone-6/core/context'
 import config from '../keystone'
 import * as PrismaModule from '.prisma/client'
+import { testConfig } from './testUtils/testConfig'
 
 const dbUrl = 'postgresql://postgres:postgres@localhost:25432/testing'
 const prismaSchemaPath = path.join(__dirname, '../schema.prisma')

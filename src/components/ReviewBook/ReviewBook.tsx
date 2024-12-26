@@ -4,10 +4,12 @@ import image from '../../public/image.png'
 import { ReviewsContainer } from '../ReviewsContainer'
 import { useBookDetails } from '../../hooks/book'
 import { useRouter } from 'next/router'
+import { Rating } from '../Rating'
+import { ReactNode } from 'react'
 
 interface BookInfo {
   Название: string | undefined
-  Рейтинг: number
+  Рейтинг: ReactNode
   'Количество отзывов': number | undefined
 }
 
@@ -18,7 +20,7 @@ export const ReviewBook = () => {
 
   const bookData: BookInfo = {
     Название: book?.title,
-    Рейтинг: book?.averageRating || 0,
+    Рейтинг: <Rating rating={book?.averageRating || 0} />,
     'Количество отзывов': book?.reviewsCount || 0
   }
   return (

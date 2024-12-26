@@ -1,9 +1,9 @@
 import { graphql, list } from '@keystone-6/core'
 import { relationship, text, timestamp, virtual } from '@keystone-6/core/fields'
-import { trackingFields } from '../trackingFields'
+import { trackingFields } from '../../trackingFields'
 import { allOperations } from '@keystone-6/core/access'
-import { isAuth } from '../access_utils/isAuth'
-import { isAdmin } from '../access_utils/isAdmin'
+import { isAuth } from '../../accessUtils/isAuth'
+import { isAdmin } from '../../accessUtils/isAdmin'
 
 const Book = list({
   access: {

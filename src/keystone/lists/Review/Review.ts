@@ -1,10 +1,10 @@
 import { list } from '@keystone-6/core'
 import { relationship, text, timestamp } from '@keystone-6/core/fields'
-import { stars } from '../../../admin/customField'
+import { stars } from '../../../../admin/customField'
 import { allOperations } from '@keystone-6/core/access'
-import { isAuth } from '../access_utils/isAuth'
-import { trackingFields } from '../trackingFields'
-import { isAdmin } from '../access_utils/isAdmin'
+import { isAuth } from '../../accessUtils/isAuth'
+import { trackingFields } from '../../trackingFields'
+import { isAdmin } from '../../accessUtils/isAdmin'
 
 const Review = list({
   access: {
